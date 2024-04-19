@@ -1,0 +1,903 @@
+"",,,Number of,Data,
+Parameter name,Description,Option,,,Default value
+"",,,Values,type,
+"",,,,,executable
+executable_model2,Pathname (full or relative) of the PRMS executable,ndispGraphs > 0,1,4,prmsIV
+initial_deltat,Initial time step for the simulation,ndispGraphs > 0,1,2,24.0
+ndispGraphs,Number of plots included in the runtime graph,graphical output,1,1,0
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+"",Basic physical attributes,,,,,,
+elev_units,Flag to indicate the units of elevation values (0=feet;,one,integer,none,0 or 1,0,required
+"",1=meters),,,,,,
+hru_area,Area of each HRU,nhru,real,acres,0.0001 to,1.0,required
+"",,,,,1.0E9,,
+hru_aspect,Aspect of each HRU,nhru,real,angular,0.0 to,0.0,required
+"",,,,degrees,360.0,,
+hru_elev,Mean elevation for each HRU,nhru,real,elev_units,"-1,000.0 to",0.0,required
+"",,,,,"30,000.0",,
+hru_lat,Latitude of each HRU,nhru,real,degrees,-90.0 to,40.0,required
+"",,,,North,90.0,,
+hru_lon,Longitude of each HRU,nhru,real,degrees East,-360.0 to,-105.0,optional
+"",,,,,360.0,,
+hru_slope,Slope of each HRU,nhru,real,decimal,0.0 to 10.0,0.0,required
+"",,,,fraction,,,
+hru_type5,Type of each HRU (0=inactive; 1=land; 2=lake;,nhru,integer,none,0 to 4,1,required
+"",3=swale; 4=glacier),,,,,,
+nhm_id6,National Hydrologic Model HRU ID,nhru,integer,none,1 to,1,optional
+"",,,,,9999999,,
+nhm_seg6,National Hydrologic Model segment ID,nsegment,integer,none,1 to,1,optional
+"",,,,,9999999,,
+parent_gw6,Index in parent model for each GWR,ngw,integer,none,1 to,1,optional
+"",,,,,9999999,,
+parent_hru6,Index in parent model for each HRU,nhru,integer,none,1 to,1,optional
+"",,,,,9999999,,
+parent_poigages6,Index in parent model for each POI gage,npoigages,integer,none,1 to,1,optional
+"",,,,,9999999,,
+parent_segment6,Index in parent model for each segment,nsegment,integer,none,1 to,1,optional
+"",,,,,9999999,,
+parent_ssr6,Index in parent model for each SSR,nssr,integer,none,1 to,1,optional
+Parameter name,Description Dimension1,Type,,Units,Range,Default,Required/condition
+"",Measured input,,,,,,
+outlet_sta,Index of measured streamflow station corresponding to one,integer,,none,0 to nobs,0,nobs > 0
+"",the basin outlet,,,,,,
+precip_units,Flag to indicate the units of measured precipitation one,integer,,none,0 or 1,0,required
+"",values (0=inches; 1=mm),,,,,,
+rad_conv,Conversion factor to Langleys for measured solar one,real,,Langleys/,0.1 to,1.0,nsol > 0
+"",radiation,,,radiation,100.0,,
+"",,,,units,,,
+rain_code,Monthly (January to December) flag indicating rule for nmonths,integer,,none,1 to 5,2,precip_module =
+"",precipitation measurement station use (1=only,,,,,,xyz_dist
+"",precipitation if the regression stations have precipitation;,,,,,,
+"",2=only precipitation if any station in the basin has,,,,,,
+"",precipitation; 3=precipitation if module xyz_dist,,,,,,
+"",computes any; 4=only precipitation if rain_day variable,,,,,,
+"",is set to 1; 5=only precipitation if psta_freq_nuse,,,,,,
+"",stations have precipitation),,,,,,
+runoff_units,Measured streamflow units (0=cfs; 1=cms) one,integer,,none,0 or 1,0,nobs > 0
+temp_units,Flag to indicate the units of measured air-temperature one,integer,,none,0 or 1,0,required
+"",values (0=Fahrenheit; 1=Celsius),,,,,,
+"",Water Use input,,,,,,
+irr_type,Application method of irrigation water for each HRU (0 nhru,integer,,none,0 to 4,0,nwateruse > 1 and at
+"",= sprinkler method with interception only; 1=ditch/drip,,,,,,least one water-use
+"",method with no interception; 2=ignore; 3=sprinkler,,,,,,destination is the plant
+"",across whole HRU with interception and throughfall;,,,,,,"canopy, dest_type = 8"
+"",4=sprinkler method with amount of water applied on the,,,,,,
+"","basis of cover density, such as a living filter), for options",,,,,,
+"","1, 2, and 3 irrigation water is specified as an' HRU-area",,,,,,
+"",weighted average value,,,,,,
+"",Air temperature and precipitation distribution,,,,,,
+adjmix_rain,"Monthly (January to December) factor to adjust rain nhru,",real,,decimal,0.0 to 3.0,1.0,required
+"",proportion in a mixed rain/snow event nmonths,,,fraction,,,
+adjust_rain,"Monthly (January to December) rain downscaling nrain,",real,,decimal,-0.5 to 3.0,-0.4,precip_module =
+"",adjustment factor for each precipitation measurement nmonths,,,fraction,,,ide_dist or
+"",station,,,,,,xyz_dist
+adjust_snow,"Monthly (January to December) snow downscaling nrain,",real,,decimal,-0.5 to 3.0,-0.4,precip_module =
+"",adjustment factor for each precipitation measurement nmonths,,,fraction,,,ide_dist or
+"",station,,,,,,xyz_dist
+basin_tsta,Index of temperature station used to compute basin one,integer,,none,0 to ntemp,0,temp_module =
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+"",,,,,,,"temp_sta,"
+"",,,,,,,"temp_dist2, or"
+"",,,,,,,temp_laps
+conv_flag,Elevation conversion flag (0=none; 1=feet to meters;,one,integer,none,0 to 2,0,precip_module and
+"",2=meters to feet),,,,,,temp_module =
+"",,,,,,,xyz_dist
+dist_exp,Exponent for inverse distance calculations,one,real,none,0.0 to 10.0,2.0,precip_module and
+"",,,,,,,temp_module =
+"",,,,,,,ide_dist
+dist_max,Maximum distance from an HRU to a measurement,one,real,feet,0.0 to,1.0E9,precip_module =
+"",station for use in calculations,,,,1.0E9,,precip_dist2
+"",,,,,,,and/or temp_module
+"",,,,,,,= temp_dist2
+hru2map_id,HRU identification number for each HRU to mapped,nmap2hru,integer,none,0 to nmap,0,precip_module =
+"",spatial units’ intersection,,,,,,precip_map and/or
+"",,,,,,,temp_module =
+"",,,,,,,temp_map
+hru2map_pct,Portion of HRU associated with each HRU to map,nmap2hru,real,decimal,0.0 to 1.0,0.0,precip_module =
+"",intersection,,,fraction,,,precip_map and/or
+"",,,,,,,temp_module =
+"",,,,,,,temp_map
+hru_plaps,Index of the lapse precipitation measurement station,nhru,integer,none,0 to nrain,0,precip_module =
+"",used for lapse rate calculations for each HRU,,,,,,precip_laps
+hru_psta,Index of the base precipitation measurement station used,nhru,integer,none,0 to nrain,0,precip_module =
+"",for lapse rate calculations for each HRU,,,,,,precip_1sta or
+"",,,,,,,precip_laps
+hru_tlaps,Index of the lapse temperature station used for lapse rate,nhru,integer,none,0 to ntemp,0,temp_module =
+"",calculations,,,,,,temp_laps
+hru_tsta,Index of the base temperature station used for lapse rate,nhru,integer,none,0 to ntemp,0,temp_module =
+"",calculations,,,,,,"temp_1sta,"
+"",,,,,,,"temp_sta, or"
+"",,,,,,,temp_laps
+hru_x,Longitude (X) of each HRU for the centroid in albers,nhru,real,meters,-1.0E7 to,0.0,precip_module and
+"",projection,,,,1.0E7,,temp_module =
+"",,,,,,,ide_dist or
+"",,,,,,,xyz_dist
+hru_xlong,"Longitude of each HRU for the centroid, State Plane",nhru,real,feet,-1.0E9 to,0.0,temp_module =
+"",Coordinate System,,,,1.0E9,,temp_dist2 or
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+hru_y,Latitude (Y) of each HRU for the centroid in albers,nhru,real,meters,-1.0E7 to,0.0,precip_module and
+"",projection,,,,1.0E7,,temp_module =
+"",,,,,,,ide_dist or
+"",,,,,,,xyz_dist
+hru_ylat,"Latitude of each HRU for the centroid, State Plane",nhru,real,feet,-1.0E9 to,0.0,temp_module =
+"",Coordinate System,,,,1.0E9,,temp_dist2 and/or
+"",,,,,,,precip_module =
+"",,,,,,,precip_dist2
+lapsemax_max,Monthly (January to December) maximum lapse rate to,nmonths,real,temp_units/,-3.0 to 3.0,2.0,temp_module =
+"",constrain lowest maximum lapse rate based on historical,,,feet,,,temp_dist2
+"",daily air temperatures for all air temperature-,,,,,,
+"",measurement stations,,,,,,
+lapsemax_min,Monthly (January to December) maximum lapse rate to,nmonths,real,temp_units/,-7.0 to,-6.5,temp_module =
+"",constrain lowest minimum lapse rate on the basis of,,,feet,-3.0,,temp_dist2
+"",historical daily air temperatures for all air temperature-,,,,,,
+"",measurement stations,,,,,,
+lapsemin_max,Monthly (January to December) minimum lapse rate to,nmonths,real,temp_units/,-2.0 to 4.0,3.0,temp_module =
+"",constrain lowest maximum lapse rate on the basis of,,,feet,,,temp_dist2
+"",historical daily air temperatures for all air temperature-,,,,,,
+"",measurement stations,,,,,,
+lapsemin_min,Monthly (January to December) minimum lapse rate to,nmonths,real,temp_units/,-7.0 to,-4.0,temp_module =
+"",constrain lowest minimum lapse rate on the basis of,,,feet,-3.0,,temp_dist2
+"",historical daily air temperatures for all air temperature-,,,,,,
+"",measurement stations,,,,,,
+map2hru_id,Mapped spatial unit identification number for each HRU,nmap2hru,integer,none,0 to nhru,0,precip_module =
+"",to map intersection,,,,,,precip_map and/or
+"",,,,,,,temp_module =
+"",,,,,,,temp_map
+max_lapse,Monthly (January to December) maximum air,"nlapse,",real,none,-100.0 to,0.0,temp_module =
+"","temperature lapse rate for each direction (X, Y, and Z) )",nmonths,,,100.0,,xyz_dist
+max_missing,Maximum number of consecutive missing values,one,integer,none,0 to 10,3,temp_module =
+"",allowed for any air temperature measurement station;,,,,,,"temp_1sta,"
+"",missing value set to last valid value; 0=unlimited,,,,,,"temp_sta, or"
+"",,,,,,,temp_laps
+max_psta,Maximum number of precipitation measurement stations,one,integer,none,0 to nrain,0,precip_module =
+"",to use for distributing precipitation to an HRU,,,,,,precip_dist2
+max_tsta,Maximum number of air temperature measurement,one,integer,none,0 to ntemp,0,temp_module =
+"",stations to use for distributing temperature to an HRU,,,,,,temp_dist2
+maxday_prec,Maximum measured precipitation value above which,one,real,precip_units,0.0 to 20.0,15.0,precip_module =
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+min_lapse,Monthly (January to December) minimum air,"nlapse,",real,none,-100.0 to,0.0,temp_module =
+"","temperature lapse rate for each direction (X, Y, and Z)",nmonths,,,100.0,,xyz_dist
+monmax,Monthly maximum air temperature to constrain lowest,nmonths,real,temp_units,0.0 to,100.0,temp_module =
+"",maximum air temperatures for bad values on the basis of,,,,115.0,,temp_dist2
+"",historical temperature for all measurement stations,,,,,,
+monmin,Monthly minimum air temperature to constrain lowest,nmonths,real,temp_units,-60.0 to,-60.0,temp_module =
+"",maximum air temperatures for bad values on the basis of,,,,65.0,,temp_dist2
+"",historical temperature for all measurement stations,,,,,,
+ndist_psta,Number of precipitation measurement stations for,one,integer,none,0 to nrain,0,precip_module =
+"",inverse distance calculations,,,,,,ide_dist
+ndist_tsta,Number of air temperature measurement stations for,one,integer,none,0 to ntemp,0,temp_module =
+"",inverse distance calculations,,,,,,ide_dist
+padj_rn,Monthly (January to December) factor to adjust rain,"nrain,",real,precip_units,-2.0 to 10.0,1.0,precip_module =
+"",lapse rate computed between station hru_psta and,nmonths,,,,,precip_laps
+"",station hru_plaps; positive factors are multiplied times,,,,,,
+"",the lapse rate and negative factors are made positive and,,,,,,
+"",substituted for the computed lapse rate,,,,,,
+padj_sn,Monthly (January to December) factor to adjust snow,"nrain,",real,precip_units,-2.0 to 10.0,1.0,precip_module =
+"",lapse rate computed between station hru_psta and,nmonths,,,,,precip_laps
+"",station hru_plaps; positive factors are multiplied times,,,,,,
+"",the lapse rate and negative factors are made positive and,,,,,,
+"",substituted for the computed lapse rate,,,,,,
+pmn_mo,Mean monthly (January to December) precipitation for,"nrain,",real,precip_units,0.00001 to,1.0,precip_module =
+"",each lapse precipitation measurement station,nmonths,,,100.0,,precip_laps
+potet_cbh_adj,Monthly (January to December) adjustment factor to,"nhru,",real,decimal,0.5 to 1.5,1.0,et_module =
+"",potential evapotranspiration specified in CBH Files for,nmonths,,fraction,,,climate_hru
+"",each HRU,,,,,,
+ppt_add,Mean value for the precipitation measurement station,one,real,precip_units,-10.0 to,0.0,precip_module =
+"",transformation equation,,,,10.0,,xyz_dist
+ppt_div,Standard deviation for the precipitation measurement,one,real,precip_units,-10.0 to,1.0,precip_module =
+"",station transformation equation (not 0.0),,,,10.0,,xyz_dist
+ppt_lapse,Monthly (January to December) precipitation lapse rate,"nlapse,",real,none,-10.0 to,0.0,precip_module =
+"","for each direction (X, Y, and Z)",nmonths,,,10.0,,xyz_dist
+ppt_zero_thresh,Precipitation below this amount is set to 0.0,one,real,precip_units,0.0 to 0.1,0.0,required
+prcp_wght_dist,Monthly (January to December) precipitation weighting,nmonths,real,decimal,0.0 to 1.0,0.5,precip_module =
+"",function for inverse distance calculations,,,fraction,,,ide_dist
+precip_map_adj,Monthly (January to December) multiplicative,"nmap,",real,decimal,0.5 to 2.0,1.0,precip_module =
+"",adjustment factor to mapped precipitation to account for,nmonths,,fraction,,,precip_map
+"","differences in elevation, and so forth",,,,,,
+psta_elev,Elevation of each precipitation measurement station,nrain,real,elev_units,-300.0 to,0.0,precip_module =
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+"",,,,,"30,000.0",,"ide_dist,"
+"",,,,,,,"xyz_dist, or"
+"",,,,,,,precip_laps
+psta_freq_nuse,The subset of precipitation measurement stations used to,nrain,integer,none,0 or 1,1,precip_module =
+"",determine if there is precipitation in the basin (0=station,,,,,,xyz_dist
+"",not used; 1=station used),,,,,,
+psta_mon,Monthly (January to December) factor to precipitation at,"nrain,",real,precip_units,0.0 to 50.0,1.0,precip_module =
+"",each measured station to adjust precipitation distributed,nmonths,,,,,precip_dist2
+"","to each HRU to account for differences in elevation, and",,,,,,
+"",so forth,,,,,,
+psta_month_ppt,Average monthly (January to December) maximum,"nrain,",real,precip_units,0.0 to 20.0,0.0,precip_module =
+"",precipitation at each precipitation measurement station,nmonths,,,,,xyz_dist
+psta_nuse,The subset of precipitation measurement stations used in,nrain,integer,none,0 or 1,1,precip_module =
+"",the distribution regression (0=station not used; 1=station,,,,,,ide_dist or
+"",used),,,,,,xyz_dist
+psta_x,Longitude (X) for each precipitation measurement,nrain,real,meters,-1.0E7 to,0.0,precip_module =
+"",station in albers projection,,,,1.0E7,,ide_dist or
+"",,,,,,,xyz_dist
+psta_xlong,"Longitude of each precipitation measurement station,",nrain,real,feet,-1.0E9 to,0.0,precip_module =
+"",State Plane Coordinate System,,,,1.0E9,,precip_dist2
+psta_y,Latitude (Y) for each precipitation measurement station,nrain,real,meters,-1.0E7 to,0.0,precip_module =
+"",in albers projection,,,,1.0E7,,ide_dist or
+"",,,,,,,xyz_dist
+psta_ylat,"Latitude of each precipitation measurement station, State",nrain,real,feet,-1.0E9 to,0.0,precip_module =
+"",Plane Coordinate System,,,,1.0E9,,precip_dist2
+rain_adj,Monthly (January to December) factor to adjust,"nhru,",real,decimal,0.5 to 10.0,1.0,precip_module =
+"",measured rain on each HRU to account for differences,nmonths,,fraction,,,precip_1sta
+"","in elevation, and so forth",,,,,,
+rain_cbh_adj,Monthly (January to December) adjustment factor to,"nhru,",real,decimal,0.5 to 2.0,1.0,precip_module =
+"",measured precipitation determined to be rain on each,nmonths,,fraction,,,climate_hru
+"","HRU to account for differences in elevation, and so forth",,,,,,
+rain_mon,Monthly (January to December) factor to rain on each,"nhru,",real,precip_units,0.0 to 50.0,1.0,precip_module =
+"",HRU to adjust precipitation distributed to each HRU to,nmonths,,,,,precip_dist2
+"","account for differences in elevation, and so forth",,,,,,
+snow_adj,Monthly (January to December) factor to adjust,"nhru,",real,decimal,0.5 to 2.5,1.0,precip_module =
+"",measured snow on each HRU to account for differences,nmonths,,fraction,,,precip_1sta
+"","in elevation, and so forth",,,,,,
+snow_cbh_adj,Monthly (January to December) adjustment factor to,"nhru,",real,decimal,0.5 to 2.0,1.0,precip_module =
+"",measured precipitation determined to be snow on each,nmonths,,fraction,,,climate_hru
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+snow_mon,Monthly (January to December) factor to snow on each,"nhru,",real,precip_units,0.0 to 50.0,1.0,precip_module =
+"",HRU to adjust precipitation distributed to each HRU to,nmonths,,,,,precip_dist2
+"","account for differences in elevation, and so forth",,,,,,
+solrad_elev,Elevation of the solar radiation station used for the,one,real,meters,-300.0 to,0.0,temp_module =
+"",degree-day curves to distribute temperature,,,,"30,000.0",,ide_dist or
+"",,,,,,,xyz_dist
+temp_wght_dist,Monthly (January to December) temperature weighting,nmonths,real,decimal,0.0 to 1.0,0.5,temp_module =
+"",function for inverse distance calculations,,,fraction,,,ide_dist
+tmax_add,Mean value for the air-temperature measurement station,one,real,temp_units,-100.0 to,0.0,temp_module =
+"",transformation equation for maximum air temperature,,,,100.0,,xyz_dist
+tmax_adj,"Adjustment to maximum air temperature for each HRU,","nhru,",real,temp_units,-10.0 to,0.0,temp_module =
+"",estimated on the basis of slope and aspect,nmonths,,,10.0,,"temp_1sta,"
+"",,,,,,,"temp_sta,"
+"",,,,,,,"temp_laps,"
+"",,,,,,,"temp_dist2,"
+"",,,,,,,ide_dist or
+"",,,,,,,xyz_dist
+tmax_allrain,Monthly (January to December) maximum air,"nhru,",real,temp_units,-8.0 to 75.0,38.0,model_mode = PRMS
+"",temperature when precipitation is assumed to be rain; if,nmonths,,,,,
+"",HRU air temperature is greater than or equal to this,,,,,,
+"","value, precipitation is rain",,,,,,
+tmax_allrain_dist,Monthly (January to December) maximum air,nmonths,real,temp_units,-8.0 to 75.0,38.0,temp_module =
+"",temperature when precipitation is assumed to be rain; if,,,,,,xyz_dist
+"",HRU air temperature is greater than or equal to this,,,,,,
+"","value, precipitation is rain",,,,,,
+tmax_allrain_offset,Monthly (January to December) maximum air,"nhru,",real,temp_units,0.0 to 50.0,1.0,model_mode =
+"",temperature when precipitation is assumed to be rain; if,nmonths,,,,,PRMS5
+"",HRU air temperature is greater than or equal to,,,,,,
+"","tmax_allsnow plus this value, precipitation is rain",,,,,,
+tmax_allrain_sta,Monthly (January to December) maximum air,"nrain,",real,temp_units,-8.0 to 75.0,38.0,temp_module =
+"",temperature when precipitation is assumed to be rain; if,nmonths,,,,,ide_dist
+"","air temperature is greater than or equal to this value,",,,,,,
+"",precipitation is rain,,,,,,
+tmax_allsnow,Monthly (January to December) maximum air,"nhru,",real,temp_units,-10.0 to,32.0,required
+"",temperature when precipitation is assumed to be snow; if,nmonths,,,40.0,,
+"","HRU air temperature is less than or equal to this value,",,,,,,
+"",precipitation is snow,,,,,,
+tmax_allsnow_dist,Maximum air temperature when precipitation is assumed,one,real,temp_units,-10.0 to,32.0,temp_module =
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+tmax_allsnow_sta,Monthly (January to December) maximum air,"nrain,",real,temp_units,-10.0 to,38.0,temp_module =
+"",temperature when precipitation is assumed to be snow; if,nmonths,,,40.0,,ide_dist
+"","air temperature is less than or equal to this value,",,,,,,
+"",precipitation is snow,,,,,,
+tmax_cbh_adj,Monthly (January to December) adjustment factor to,"nhru,",real,temp_units,-10.0 to,0.0,temp_module =
+"","maximum air temperature for each HRU, estimated on",nmonths,,,10.0,,climate_hru
+"",the basis of slope and aspect,,,,,,
+tmax_div,Standard deviation for the air-temperature-measurement,one,real,temp_units,-100.0 to,1.0,temp_module =
+"",station transformation equation for maximum air,,,,100.0,,xyz_dist
+"",temperature (not 0.0),,,,,,
+tmax_map_adj,Monthly (January to December) additive adjustment,"nmap,",real,temp_units,-10.0 to,0.0,temp_module =
+"",factor to maximum air temperature for each mapped,nmonths,,,10.0,,temp_map
+"",spatial unit estimated on the basis of slope and aspect,,,,,,
+tmax_lapse,Monthly (January to December) values representing the,"nhru,",real,temp_units/,-20.0 to,3.0,temp_module =
+"","change in maximum air temperature per 1,000",nmonths,,elev_units,20.0,,temp_1sta
+"",elev_units of elevation change for each HRU,,,,,,
+tmin_add,Mean value for the air-temperature-measurement station,one,real,temp_units,-100.0 to,0.0,temp_module =
+"",transformation equation for minimum air temperature,,,,100.0,,xyz_dist
+tmin_adj,"Adjustment to minimum air temperature for each HRU,","nhru,",real,temp_units,-10.0 to,0.0,temp_module =
+"",estimated on the basis of slope and aspect,nmonths,,,10.0,,"temp_1sta,"
+"",,,,,,,"temp_sta,"
+"",,,,,,,"temp_laps,"
+"",,,,,,,"temp_dist2,"
+"",,,,,,,ide_dist or
+"",,,,,,,xyz_dist
+tmin_cbh_adj,Monthly (January to December) adjustment factor to,"nhru,",real,temp_units,-10.0 to,0.0,temp_module =
+"","minimum air temperature for each HRU, estimated on",nmonths,,,10.0,,climate_hru
+"",the basis of slope and aspect,,,,,,
+tmin_div,Standard deviation for the air-temperature-measurement,one,real,temp_units,-100.0 to,1.0,temp_module =
+"",station transformation equation for minimum air,,,,100.0,,xyz_dist
+"",temperature (not 0.0),,,,,,
+tmin_map_adj,Monthly (January to December) additive adjustment,"nmap,",real,temp_units,-10.0 to,0.0,temp_module =
+"",factor to minimum air temperature for each mapped,nmonths,,,10.0,,temp_map
+"","spatial unit, estimated on the basis of slope and aspect",,,,,,
+tmin_lapse,Monthly (January to December) values representing the,"nhru,",real,temp_units/,-20.0 to,3.0,temp_module =
+"","change in minimum air temperature per 1,000",nmonths,,elev_units,20.0,,temp_1sta
+"",elev_units of elevation change for each HRU,,,,,,
+tsta_elev,Elevation of each air-temperature-measurement station,ntemp,real,elev_units,-300.0 to,,
+"",,,,,"30,000.0",,
+tsta_month_max,Average monthly (January to December) maximum air,"ntemp,",real,temp_units,-100.0 to,0.0,temp_module =
+Parameter name,Description Dimension1,,Type,Units,Range,Default,Required/condition
+"",temperature at each air-temperature-measurement station nmonths,,,,100.0,,xyz_dist
+tsta_month_min,"Average monthly (January to December) minimum air ntemp,",,real,temp_units,-100.0 to,0.0,temp_module =
+"",temperature at each air-temperature-measurement station nmonths,,,,100.0,,xyz_dist
+tsta_nuse,The subset of temperature stations used in the ntemp,,integer,none,0 or 1,0,temp_module =
+"",distribution regression (0=station not used; 1=station,,,,,,ide_dist or
+"",used),,,,,,xyz_dist
+tsta_x,Longitude (X) for each air-temperature-measurement ntemp,,real,meters,-1.0E7 to,0.0,temp_module =
+"",station in albers projection,,,,1.0E7,,ide_dist or
+"",,,,,,,xyz_dist
+tsta_xlong,"Longitude of each air-temperature-measurement station, ntemp",,real,feet,-1.0E9 to,0.0,temp_module =
+"",State Plane Coordinate System,,,,1.0E9,,temp_dist2
+tsta_y,Latitude (Y) for each air-temperature-measurement ntemp,,real,meters,-1.0E7 to,0.0,temp_module =
+"",station in albers projection,,,,1.0E7,,ide_dist or
+"",,,,,,,xyz_dist
+tsta_ylat,"Latitude of each air-temperature-measurement station, ntemp",,real,feet,-1.0E9 to,0.0,temp_module =
+"",State Plane Coordinate System,,,,1.0E9,,temp_dist2
+x_add,Mean value for the climate station transformation one,,real,meters,-1.0E7 to,0.0,precip_module and
+"",equation for the longitude (X) coordinate,,,,1.0E7,,temp_module =
+"",,,,,,,xyz_dist
+x_div,Standard deviation for the climate station transformation one,,real,meters,-1.0E7 to,1.0,precip_module and
+"",equation for the longitude (X) coordinate (not 0.0),,,,1.0E7,,temp_module =
+"",,,,,,,xyz_dist
+y_add,Mean value for the climate station transformation one,,real,meters,-1.0E7 to,0.0,precip_module and
+"",equation for the latitude (Y) coordinate,,,,1.0E7,,temp_module =
+"",,,,,,,xyz_dist
+y_div,Standard deviation for the climate station transformation one,,real,meters,-1.0E7 to,1.0,precip_module and
+"",equation for the latitude (Y) coordinate,,,,1.0E7,,temp_module =
+"",,,,,,,xyz_dist
+z_add,Mean value for the climate station transformation one,,real,meters,-1.0E7 to,0.0,precip_module and
+"",equation for the elevation (Z) coordinate,,,,1.0E7,,temp_module =
+"",,,,,,,xyz_dist
+z_div,Standard deviation for the climate station transformation one,,real,meters,-1.0E7 to,1.0,precip_module and
+"",equation for the elevation (Z) coordinate (not 0.0),,,,1.0E7,,temp_module =
+"",,,,,,,xyz_dist
+"",Solar radiation,,,,,,
+basin_solsta,Index of solar radiation station used to compute basin one,,integer,none,0 to nsol,0,nsol > 0
+"",radiation values; used when dimension nsol>0,,,,,,
+ccov_intcp,"Monthly (January to December) intercept in cloud-cover nhru,",,real,none,0.0 to 5.0,1.83,solrad_module =
+"",relationship nmonths,,,,,,ccsolrad
+ccov_slope,"Monthly (January to December) coefficient in cloud- nhru,",,real,none,-0.5 to,-0.13,solrad_module =
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+"",cover relationship,nmonths,,,-0.01,,ccsolrad
+crad_coef,Coefficient(B) in Thompson (1976) equation; varies by,"nhru,",real,none,0.1 to 0.7,0.4,solrad_module =
+"","region, contour map of values in reference",nmonths,,,,,ccsolrad
+crad_exp,Exponent(P) in Thompson (1976) equation,"nhru,",real,none,0.2 to 0.8,0.61,solrad_module =
+"",,nmonths,,,,,ccsolrad
+dday_intcp,Monthly (January to December) intercept in degree-day,"nhru,",real,dday,-60.0 to,-40.0,solrad_module =
+"",equation for each HRU,nmonths,,,10.0,,ddsolrad
+dday_slope,Monthly (January to December) slope in degree-day,"nhru,",real,dday/,0.1 to 1.4,0.4,solrad_module =
+"",equation for each HRU,nmonths,,temp_units,,,ddsolrad
+hru_solsta,Index of solar radiation station associated with each,nhru,integer,none,0 to nsol,0,nsol > 0
+"",HRU,,,,,,
+ppt_rad_adj,"Monthly minimum precipitation, if HRU precipitation","nhru,",real,inches,0.0 to 0.5,0.02,required
+"","exceeds this value, radiation is multiplied by radj_sppt",nmonths,,,,,
+"",or radj_wppt precipitation adjustment factor,,,,,,
+radadj_intcp,Monthly (January to December) intercept in air,"nhru,",real,none,0.0 to 1.0,1.0,solrad_module =
+"",temperature range adjustment to degree-day equation for,nmonths,,,,,ddsolrad
+"",each HRU,,,,,,
+radadj_slope,Monthly (January to December) slope in air temperature,"nhru,",real,1/,0.0 to 1.0,0.0,solrad_module =
+"",range adjustment to degree-day equation for each HRU,nmonths,,temp_units,,,ddsolrad
+radj_sppt,Adjustment factor for computed solar radiation for,nhru,real,decimal,0.0 to 1.0,0.44,required
+"",summer day with greater than ppt_rad_adj inches of,,,fraction,,,
+"",precipitation for each HRU,,,,,,
+radj_wppt,Adjustment factor for computed solar radiation for,nhru,real,decimal,0.0 to 1.0,0.5,required
+"",winter day with greater than ppt_rad_adj inches of,,,fraction,,,
+"",precipitation for each HRU,,,,,,
+radmax,Monthly (January to December) maximum fraction of,"nhru,",real,decimal,0.1 to 1.0,0.8,required
+"",the potential solar radiation that may reach the ground,nmonths,,fraction,,,
+"","due to haze, dust, smog, and so forth, for each HRU",,,,,,
+tmax_index,Monthly (January to December) index temperature used,"nhru,",real,temp_units,-10.0 to,50.0,solrad_module =
+"",to determine precipitation adjustments to solar radiation,nmonths,,,110.0,,ddsolrad
+"",for each HRU,,,,,,
+"",Potential evapotranspiration distribution,,,,
+crop_coef,"Monthly (January to December) crop coefficient for nhru, real",decimal,0.0 to 2.0,1.0,et_module =
+"",each HRU nmonths,fraction,,,potet_pm or
+"",,,,,potet_pm_sta
+epan_coef,"Monthly (January to December) evaporation pan nhru, real",decimal,0.01 to 3.0,1.0,et_module =
+"",coefficient for each HRU nmonths,fraction,,,potet_pan
+hamon_coef,"Monthly (January to December) air temperature nhru, real",none,0.004 to,0.0055,et_module =
+"",coefficient used in Hamon potential ET computations nmonths,,0.008,,potet_hamon
+Parameter name,Description Dimension1,Type,,Units,Range,Default,Required/condition
+hru_humidity_sta,Index of humidity measurement station for each HRU nhru,integer,,none,0 to,0,et_module =
+"",,,,,nhumid,,potet_pm_sta and
+"",,,,,,,nhumid > 0
+hru_pansta,Index of pan evaporation station used to compute HRU nhru,integer,,none,0 to nevap,0,et_module =
+"",potential ET,,,,,,potet_pan and
+"",,,,,,,nevap > 0
+hru_windspeed_sta,Index of wind speed measurement station for each HRU nhru,integer,,none,0 to nwind,0,et_module =
+"",,,,,,,potet_pm_sta and
+"",,,,,,,nwind > 0
+hs_krs,"Monthly (January to December) adjustment factor used nhru,",real,,decimal,0.01 to,0.0135,et_module =
+"",in Hargreaves-Samani potential ET computations for nmonths,,,fraction,0.24,,potet_hs
+"",each HRU,,,,,,
+humidity_percent,"Monthly humidity for each HRU nhru,",real,,percentage,0.0 to,0.0,et_module =
+"",nmonths,,,,100.0,,potet_pm or
+"",,,,,,,potet_pt and
+"",,,,,,,humidity is not
+"",,,,,,,specified in a CBH
+"",,,,,,,File
+jh_coef,"Monthly (January to December) air temperature nhru,",real,,per degrees,-0.5 to 1.5,0.014,et_module =
+"",coefficient used in Jensen-Haise potential ET nmonths,,,Fahrenheit,,,potet_jh
+"",computations for each HRU,,,,,,
+jh_coef_hru,Air temperature coefficient used in Jensen-Haise nhru,real,,per degrees,-99.0 to,13.0,et_module =
+"",potential ET computations for each HRU,,,Fahrenheit,150.0,,potet_jh
+pm_d_coef,"Monthly (January to December) Penman-Monteith nhru,",real,,seconds/,0.25 to,0.34,et_module =
+"",potential ET D wind speed coefficient for each HRU nmonths,,,meter,0.45,,potet_pm or
+"",,,,,,,potet_pm_sta
+pm_n_coef,"Monthly (January to December) Penman-Monteith nhru,",real,,degrees,850.0 to,900.0,et_module =
+"",potential ET N temperature coefficient for each HRU nmonths,,,Celsius per,950.0,,potet_pm or
+"",,,,day,,,potet_pm_sta
+potet_cbh_adj,"Monthly (January to December) adjustment factor to nhru,",real,,degrees,0.5 to 1.5,1.0,et_module =
+"",potential evapotranspiration specified in CBH Files for nmonths,,,decimal,,,climate_hru
+"",each HRU,,,fraction,,,
+pt_alpha,"Monthly (January to December) adjustment factor used nhru,",real,,decimal,1.0 to 2.0,1.26,et_module =
+"",in Priestly-Taylor potential ET computations for each nmonths,,,fraction,,,potet_pt
+"",HRU,,,,,,
+"",Evapotranspiration and sublimation,,,,,,
+fall_frost,The solar date (number of days after winter solstice) of nhru,integer,,solar date,1 to 366,264,transp_module =
+"",the first killing frost of the fall,,,,,,transp_frost
+frost_temp,Temperature of killing frost nhru,real,,temp_units,-10.0 to,28.0,model_mode =
+"",,,,,32.0,,FROST
+Parameter name,Description Dimension1,,Type,Units,Range,Default,Required/condition
+potet_sublim,Fraction of potential ET that is sublimated from snow in nhru,,real,decimal,0.1 to 0.75,0.5,required
+"",the canopy and snowpack for each HRU,,,fraction,,,
+rad_trncf,Transmission coefficient for short-wave radiation nhru,,real,decimal,0.0 to 1.0,0.5,required
+"",through the winter vegetation canopy,,,fraction,,,
+soil_type,Soil type of each HRU (1=sand; 2=loam; 3=clay) nhru,,integer,none,1 to 3,2,required
+spring_frost,The solar date (number of days after winter solstice) of nhru,,integer,solar date,1 to 366,111,transp_module =
+"",the last killing frost of the spring,,,,,,transp_frost
+transp_beg,Month to begin summing maximum air temperature for nhru,,integer,month,1 to 12,1,transp_module =
+"",each HRU; when sum is greater than or equal to,,,,,,transp_tindex
+"","transp_tmax, transpiration begins",,,,,,
+transp_end,Month to stop transpiration computations; transpiration nhru,,integer,month,1 to 13,13,transp_module =
+"",is computed through the end of previous month,,,,,,transp_tindex
+transp_tmax,Temperature index to determine the specific date of the nhru,,real,temp_units,0.0 to,1.0,transp_module =
+"",start of the transpiration period; the maximum air,,,,"1,000.0",,transp_tindex
+"",temperature for each HRU is summed starting with the,,,,,,
+"",first day of month transp_beg; when the sum exceeds,,,,,,
+"","this index, transpiration begins",,,,,,
+"",Interception,,,,,,
+cov_type,Vegetation cover type for each HRU (0=bare soil; nhru,,integer,none,0 to 4,3,required
+"",1=grasses; 2=shrubs; 3=trees; 4=coniferous),,,,,,
+covden_sum,Summer vegetation cover density for the major nhru,,real,decimal,0.0 to 1.0,0.5,required
+"",vegetation type in each HRU,,,fraction,,,
+covden_win,Winter vegetation cover density for the major vegetation nhru,,real,decimal,0.0 to 1.0,0.5,required
+"",type in each HRU,,,fraction,,,
+snow_intcp,Snow interception storage capacity for the major nhru,,real,inches,0.0 to 1.0,0.1,required
+"",vegetation type in each HRU,,,,,,
+srain_intcp,Summer rain interception storage capacity for the major nhru,,real,inches,0.0 to 1.0,0.1,required
+"",vegetation type in each HRU,,,,,,
+wrain_intcp,Winter rain interception storage capacity for the major nhru,,real,inches,0.0 to 1.0,0.1,required
+"",vegetation type in each HRU,,,,,,
+"",Snow computations,,,,,,
+albset_rna,Fraction of rain in a mixed precipitation event above one,,real,decimal,0.5 to 1.0,0.8,required
+"",which the snow albedo is not reset; applied during the,,,fraction,,,
+"",snowpack accumulation stage,,,,,,
+albset_rnm,Fraction of rain in a mixed precipitation event above one,,real,decimal,0.4 to 1.0,0.6,required
+"",which the snow albedo is not reset; applied during the,,,fraction,,,
+"",snowpack melt stage,,,,,,
+albset_sna,"Minimum snowfall, in water equivalent, needed to reset one",,real,inches,0.01 to 1.0,0.05,required
+"",snow albedo during the snowpack accumulation stage,,,,,,
+albset_snm,"Minimum snowfall, in water equivalent, needed to reset one",,real,inches,0.1 to 1.0,0.2,required
+den_init,Initial density of new-fallen snow,nhru,real,grams/cubic,0.01 to 0.5,0.1,required
+"",,,,centimeters,,,
+den_max,Average maximum snowpack density,nhru,real,grams/cubic,0.1 to 0.8,0.6,required
+"",,,,centimeters,,,
+emis_noppt,Average emissivity of air on days without precipitation,nhru,real,decimal,0.757 to,0.757,required
+"",for each HRU,,,fraction,1.0,,
+freeh2o_cap,Free-water holding capacity of snowpack expressed as a,nhru,real,decimal,0.01 to 0.2,0.05,required
+"",decimal fraction of the frozen water content of the,,,fraction,,,
+"",snowpack (pk_ice) for each HRU,,,,,,
+hru_deplcrv,Index number for the snowpack areal depletion curve,nhru,integer,none,1 to ndepl,1,snarea_curve_flag=0
+"",associated with each HRU,,,,,,
+melt_force,Julian date to force snowpack to spring snowmelt stage;,nhru,integer,Julian day,1 to 366,140,required
+"",varies with region depending on length of time that,,,,,,
+"",permanent snowpack exists for each HRU,,,,,,
+melt_look,Julian date to start looking for spring snowmelt stage;,nhru,integer,Julian day,1 to 366,90,required
+"",varies with region depending on length of time that,,,,,,
+"",permanent snowpack exists for each HRU,,,,,,
+settle_const,Snowpack settlement time constant,nhru,real,decimal,0.01 to 0.5,0.1,required
+"",,,,fraction,,,
+snarea_a,Snow area depletion curve minimum snow-water,nhru,real,inches,0.0 to 1.0,0.0,snarea_curve_flag=1
+"",equivalent (SWE) value for each HRU,,,,,,
+snarea_b,Snow area depletion curve B coefficient used in,nhru,real,none,0.5 to 20.0,2.0,snarea_curve_flag=1
+"",computing values off an S curve for each HRU,,,,,,
+snarea_c,Snow area depletion curve C coefficient used in,nhru,real,none,0.001 to,1.5,snarea_curve_flag=1
+"",computing values off an S curve for each HRU,,,,3.0,,
+snarea_d,Snow area depletion curve D coefficient used in,nhru,real,none,0.0 to 3.0,0.975,snarea_curve_flag=1
+"",computing values off an S curve for each HRU,,,,,,
+snarea_curve,"Snow area depletion curve values, 11 values for each",ndeplval,real,decimal,0.0 to 1.0,1.0,snarea_curve_flag=0
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+"",snow albedo during the snowpack melt stage,,,,,,
+cecn_coef,Monthly (January to December) convection,"nhru,",real,calories per,0.02.0 to,5.0,required
+"",condensation energy coefficient for each HRU,nmonths,,degree,20.0,,
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+abl_elev_range,Average HRU snowfield ablation zones elevation range,nhru,real,elev_units,0.0 to,1000.0,glacier_flag = 1
+"",or approximate median-min elevation,,,,17000.0,,
+albedo_coef,Coefficient in calculation of ice albedo,nhru,real,none,0.1 to 0.3,0.137,glacier_flag = 1
+albedo_ice,Ice albedo 300 meters below equilibrium line altitude,nhru,real,decimal,0.2 to 0.6,0.344,glacier_flag = 1
+"",(ELA),,,fraction,,,
+"",,,,,,,
+cfgi_decay,Continuous frozen ground index (CFGI) daily decay of,one,real,decimal,0.1 to 1.0,0.97,frozen_flag = 1
+"",index; value of 1.0 is no decay,,,fraction,,,
+cfgi_thrshld,Continuous frozen ground index (CFGI) threshold value,one,real,none,1.0 to,52.55,frozen_flag = 1
+"",indicating frozen soil,,,,500.0,,
+glacier_frac_init,Initial fraction of glaciation (0=none; 1=100%) in,nhru,real,decimal,0.0 to 1.0,0.0,glacier_flag = 1
+"",glacier-capable HRU,,,fraction,,,
+glacr_freeh2o_cap,Free-water holding capacity of glacier ice of the frozen,nhru,real,decimal,0.0 to 0.1,0.002,glacier_flag = 1
+"",water content of the glacier ice (glacr_pk_ice),,,fraction,,,
+glacr_layer,Active layer is 0 to 15 m (590.6 inches) thick at start of,nhru,real,inches,0.0 to,0.0,glacier_flag = 1
+"","year, when melts will set daily glacr_pk_temp to 0",,,,590.6,,
+glacrva_coef,"Volume area scaling coefficient for glaciers, average",nhru,real,m**(3-,0.01 to 2.0,0.28,glacier_flag = 1
+"",value by region,,,2*glacrva_e,,,
+"",,,,xp,,,
+glacrva_exp,"Volume area exponential coefficient for glaciers,",nhru,real,none,1.0 to 2.0,1.375,glacier_flag = 1
+"",average value by region,,,,,,
+glrette_frac_init,Initial fraction of glacierette (too small for glacier,nhru,real,decimal,0.0 to 1.0,0.0,glacier_flag = 1
+"",dynamics),,,fraction,,,
+"",,,,,,,
+hru_length,Length of segment covering all of glacier-possible for,nhru,real,km,0.0 to,0.0,glacier_flag = 1
+"",each HRU,,,,10000.0,,
+hru_width,Width of glacier-possible for each HRU,nhru,real,km,0.0 to,0.0,glacier_flag = 1
+"",,,,,10000.0,,
+max_gldepth,"Upper bound on glacier thickness, thickest glacier",nhru,real,km,0.1 to 3.0,1.5,glacier_flag = 1
+"","measured is Taku at 1.5 km, ice sheet 3 km",,,,,,
+stor_firm,Monthly (January to December) storage coefficient for,nhru,real,hours,150.0 to,400.0,glacier_flag = 1
+"",firn melt on glaciers,,,,1000.0,,
+stor_ice,Monthly (January to December) storage coefficient for,nhru,real,hours,5.0 to 29.0,10.0,glacier_flag = 1
+"",ice melt on glaciers,,,,,,
+stor_snow,Monthly (January to December) storage coefficient for,nhru,real,hours,30.0 to,80.0,glacier_flag = 1
+"",ice melt on glaciers,,,,149.0,,
+tohru,Index of down-flowline HRU to which the HRU glacier,nhru,integer,none,0 to nhru,0,glacier_flag = 1
+Parameter name,Description Dimension1,,Type,Units,Range,Default,Required/condition
+carea_max,Maximum possible area contributing to surface runoff nhru,,real,decimal,0.0 to 1.0,0.6,required
+"",expressed as a portion of the HRU area,,,fraction,,,
+carea_min,Minimum possible area contributing to surface runoff nhru,,real,decimal,0.0 to 1.0,0.2,srunoff_module =
+"",expressed as a portion of the area for each HRU,,,fraction,,,srunoff_carea
+hru_percent_imperv,Fraction of each HRU area that is impervious nhru,,real,decimal,0.0 to,0.0,required
+"",,,,fraction,0.999,,
+imperv_stor_max,Maximum impervious area retention storage for each nhru,,real,inches,0.0 to 0.5,0.05,required
+"",HRU,,,,,,
+smidx_coef,Coefficient in non-linear contributing area algorithm for nhru,,real,decimal,0.0 to 1.0,0.005,srunoff_module =
+"",each HRU,,,fraction,,,srunoff_smidx
+smidx_exp,Exponent in non-linear contributing area algorithm for nhru,,real,1/inch,0.0 to 5.0,0.3,srunoff_module =
+"",each HRU,,,,,,srunoff_smidx
+snowinfil_max,Maximum snow infiltration per day for each HRU nhru,,real,inches/day,0.0 to 20.0,2.0,required
+"",Surface depression storage,,,,,,
+dprst_area,Aggregate sum of surface-depression storage areas of nhru,,real,acres,0.0 to,0.0,dprst_flag = 1 and
+"",each HRU (recommend that dprst_frac_hru be used,,,,1.0E9,,model_mode = PRMS
+"",instead of dprst_area),,,,,,
+dprst_depth_avg,Average depth of storage depressions at maximum nhru,,real,inches,0.0 to,132.0,dprst_flag = 1
+"",storage capacity,,,,500.0,,
+dprst_et_coef,Fraction of unsatisfied potential evapotranspiration to nhru,,real,decimal,0.5 to 1.5,1.0,dprst_flag = 1
+"",apply to surface-depression storage,,,fraction,,,
+dprst_flow_coef,Coefficient in linear flow routing equation for open nhru,,real,fraction/day,0.00001 to,0.05,dprst_flag = 1
+"",surface depressions for each HRU,,,,0.5,,
+dprst_frac_hru,Fraction of each HRU area that has surface depressions nhru,,real,decimal,-1.0 to,-1.0,dprst_flag = 1 and
+"","(If specified, the parameter dprst_area is ignored if it",,,fraction,0.999,,model_mode = PRMS
+"","also is specified, default of -1.0 means use dprst_area)",,,,,,
+dprst_frac,Fraction of each HRU area that has surface depressions nhru,,real,decimal,0.0 to,0.0,dprst_flag = 1 and
+"",,,,fraction,0.999,,model_mode =
+"",,,,,,,PRMS5
+dprst_frac_init,Fraction of maximum surface-depression storage that nhru,,real,decimal,0.0 to 1.0,0.5,dprst_flag = 1
+"",contains water at the start of a simulation,,,fraction,,,
+dprst_frac_open,Fraction of open surface-depression storage area within nhru,,double,decimal,0.0 to 1.0,1.0,dprst_flag = 1
+"",an HRU that can generate surface runoff as a function of,,,fraction,,,
+"",storage volume,,,,,,
+dprst_seep_rate_clos,Coefficient used in linear seepage flow equation for nhru,,real,fraction/day,0.0 to 0.2,0.02,dprst_flag = 1
+"",closed surface depressions for each HRU,,,,,,
+dprst_seep_rate_open,Coefficient used in linear seepage flow equation for nhru,,real,fraction/day,0.0 to 0.2,0.02,dprst_flag = 1
+"",open surface depressions for each HRU,,,,,,
+op_flow_thres,Fraction of open depression storage above which surface nhru,,real,decimal,0.01 to 1.0,1.0,dprst_flag = 1
+Parameter name,Description Dimension1,Type,Units,,Range,Default,Required/condition
+"",capacity spills as surface runoff,,,,,,
+sro_to_dprst_imperv,Fraction of impervious surface runoff that flows into nhru,real,decimal,,0.0 to 1.0,0.2,dprst_flag = 1
+"",surface-depression storage; the remainder flows to a,,fraction,,,,
+"",stream network for each HRU,,,,,,
+sro_to_dprst,Fraction of pervious surface runoff that flows into nhru,real,decimal,,0.0 to 1.0,0.2,dprst_flag = 1 and
+"",surface-depression storage; the remainder flows to a,,fraction,,,,model_mode = PRMS
+"",stream network for each HRU,,,,,,
+sro_to_dprst_perv,Fraction of pervious surface runoff that flows into nhru,real,decimal,,0.0 to 1.0,0.2,dprst_flag = 1 and
+"",surface-depression storage; the remainder flows to a,,fraction,,,,model_mode =
+"",stream network for each HRU,,,,,,PRMS5
+va_clos_exp,Coefficient in the exponential equation relating nhru,real,none,,0.0001 to,0.001,dprst_flag = 1
+"",maximum surface area to the fraction that closed,,,,10.0,,
+"",depressions are full to compute current surface area for,,,,,,
+"",each HRU; 0.001 is an approximate cylinder; 1.0 is a,,,,,,
+"",cone,,,,,,
+va_open_exp,Coefficient in the exponential equation relating nhru,real,none,,0.0001 to,0.001,dprst_flag = 1
+"",maximum surface area to the fraction that open,,,,10.0,,
+"",depressions are full to compute current surface area for,,,,,,
+"",each HRU; 0.001 is an approximate cylinder; 1.0 is a,,,,,,
+"",cone,,,,,,
+"","Soil zone storage, interflow, gravity drainage, Dunnian surface runoff",,,,,,
+fastcoef_lin,Linear coefficient in equation to route preferential-flow nhru,real,fraction/day,,0.0 to 1.0,0.1,required
+"",storage downslope for each HRU,,,,,,
+fastcoef_sq,Non-linear coefficient in equation to route preferential- nhru,real,none,,0.0 to 1.0,0.8,required
+"",flow storage downslope for each HRU,,,,,,
+pref_flow_den,Fraction of the gravity reservoir in which preferential nhru,real,decimal,,0.0 to 0.5,0.0,required
+"",flow occurs for each HRU,,fraction,,,,
+sat_threshold,Water holding capacity of the gravity and preferential- nhru,real,inches,,0.00001 to,999.0,required
+"",flow reservoirs; difference between field capacity and,,,,999.0,,
+"",total soil saturation for each HRU,,,,,,
+slowcoef_lin,Linear coefficient in equation to route gravity-reservoir nhru,real,fraction/day,,0.0 to 1.0,0.015,required
+"",storage downslope for each HRU,,,,,,
+slowcoef_sq,Non-linear coefficient in equation to route gravity- nhru,real,none,,0.0 to 1.0,0.1,required
+"",reservoir storage downslope for each HRU,,,,,,
+soil_moist_init,Initial value of available water in capillary reservoir for nhru,real,inches,,0.0 to 20.0,3.0,model_mode = PRMS
+"",each HRU,,,,,,
+soil_moist_init_frac,Initial fraction of available water in the capillary nhru,real,decimal,,0.0 to 1.0,0.0,model_mode =
+"",reservoir (fraction of soil_moist_max for each HRU,,fraction,,,,PRMS5
+soil_moist_max,Maximum available water holding capacity of capillary nhru,real,inches,,0.00001 to,2.0,required
+Parameter name,Description Dimension1,,Type,Units,Range,Default,Required/condition
+"",vegetation type of each HRU,,,,,,
+soil_rechr_init,Initial storage for soil recharge zone (upper part of nhru,,real,inches,0.0 to 20.0,1.0,model_mode = PRMS
+"",capillary reservoir where losses occur as both,,,,,,
+"",evaporation and transpiration) for each HRU; must be,,,,,,
+"",less than or equal to soil_moist_init,,,,,,
+soil_rechr_init_frac,Initial fraction of available water in the capillary nhru,,real,decimal,0.0 to 1.0,0.0,model_mode =
+"",reservoir where losses occur as both evaporation and,,,fraction,,,PRMS5
+"",transpiration (upper zone of capillary reservoir) for each,,,,,,
+"",HRU,,,,,,
+soil_rechr_max,Maximum storage for soil recharge zone (upper portion nhru,,real,inches,0.00001 to,1.5,model_mode = PRMS
+"",of capillary reservoir where losses occur as both,,,,20.0,,
+"",evaporation and transpiration); must be less than or,,,,,,
+"",equal to soil_moist_max,,,,,,
+soil_rechr_max_frac,Fraction of the capillary reservoir water-holding nhru,,real,decimal,0.00001 to,1.0,model_mode =
+"",capacity (soil_moist_max) where losses occur as both,,,fraction,1.0,,PRMS5
+"",evaporation and transpiration (upper zone of capillary,,,,,,
+"",reservoir) for each HRU,,,,,,
+soil2gw_max,Maximum amount of the capillary reservoir excess that nhru,,real,inches,0.0 to 5.0,0.0,Required
+"",is routed directly to the GWR for each HRU,,,,,,
+ssr2gw_exp,Non-linear coefficient in equation used to route water nssr,,real,none,0.0 to 3.0,1.0,Required
+"",from the gravity reservoirs to the GWR for each HRU,,,,,,
+ssr2gw_rate,Linear coefficient in equation used to route water from nssr,,real,inches/day,0.0001 to,0.1,Required
+"",the gravity reservoir to the GWR for each HRU,,,,999.0,,
+ssstor_init,Initial storage of the gravity and preferential-flow nssr,,real,inches,0.0 to 10.0,0.0,model_mode = PRMS
+"",reservoirs for each HRU,,,,,,
+ssstor_init_frac,Initial fraction of available water in the gravity plus nssr,,real,decimal,0.0 to 1.0,0.0,model_mode =
+"",preferential-flow reservoirs (fraction of sat_threshold),,,fraction,,,PRMS5
+"",for each HRU,,,,,,
+"",Groundwater flow,,,,,,
+gwflow_coef,Linear coefficient in the equation to compute ngw,,real,fraction/day,0.0 to 0.5,0.015,required
+"",groundwater discharge for each GWR,,,,,,
+gwsink_coef,Linear coefficient in the equation to compute outflow to ngw,,real,fraction/day,0.0 to 1.0,0.0,required
+"",the groundwater sink for each GWR,,,,,,
+gwstor_init,Storage in each GWR at the beginning of a simulation ngw,,real,inches,0.0 to 50.0,2.0,required
+gwstor_min,Minimum storage in each GWR to ensure storage is ngw,,real,inches,0.0 to 1.0,0.0,required
+"",greater than specified value to account for inflow from,,,,,,
+"",deep aquifers or injection wells with the water source,,,,,,
+"",outside the basin,,,,,,
+"",Streamflow,,,,,,
+hru_segment,Segment index to which an HRU contributes lateral nhru,,integer,none,0 to,0,strmflow_module =
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+"","flows (surface runoff, interflow, and groundwater",,,,nsegment,,"muskingum,"
+"",discharge),,,,,,strmflow_in_out
+"",,,,,,,", muskingum_lake,"
+"",,,,,,,or
+"",,,,,,,muskingum_mann
+K_coef,Travel time of flood wave from one segment to the next,nsegment,real,hours,0.01 to,1.0,strmflow_module =
+"","downstream segment, called the Muskingum storage",,,,24.0,,muskingum
+"","coefficient; enter 1.0 for reservoirs, diversions, and",,,,,,
+"",segment(s) flowing out of the basin,,,,,,
+mann_n,Manning’s roughness coefficient for each segment,nsegment,real,dimensionles,0.001 to,0.04,strmflow_module =
+"",,,,s,0.15,,muskingum_mann
+obsin_segment,Index of measured streamflow station that replaces,nsegment,integer,none,0 to nobs,0,strmflow_module =
+"",inflow to a segment,,,,,,"muskingum,"
+"",,,,,,,strmflow_in_out
+"",,,,,,,", muskingum_lake,"
+"",,,,,,,or
+"",,,,,,,muskingum_mann
+obsout_segment,Index of measured streamflow station that replaces,nsegment,integer,none,0 to nobs,0,strmflow_module =
+"",outflow from a segment,,,,,,"muskingum,"
+"",,,,,,,strmflow_in_out
+"",,,,,,,", muskingum_lake,"
+"",,,,,,,or
+"",,,,,,,muskingum_mann
+seg_depth,Segment river depth at bank full; shallowest depth from,nsegment,real,meters,0.03 to,1.0,strmflow_module =
+"",Blackburn-Lynch (2017); Congo is deepest at 250 m but,,,,250.0,,muskingum_mann
+"","in the US, it is probably the Hudson at 66 m",,,,,,
+seg_length,"Length of each segment, bounds based on CONUS",nsegment,real,meters,1.0 to,1000.0,strmflow_module =
+"",,,,,100000.0,,muskingum_mann
+"",,,,,,,or stream_temp_flag
+"",,,,,,,= 1
+seg_slope,Surface slope of each segment as approximation for bed,nsegment,real,decimal,0.0 to 2.0,0.0001,strmflow_module =
+"",slope of stream,,,fraction,,,muskingum_mann
+"",,,,,,,or stream_temp_flag
+"",,,,,,,= 1
+segment_flow_init,Initial flow in each stream segment,nsegment,real,cfs,0 to 1.0E7,0.0,strmflow_module =
+Parameter name,Description Dimension1,,Type,Units,Range,Default,Required/condition
+"",,,,,,,muskingum_mann
+segment_type,Segment type (0=segment; 1= headwater; 2=lake; nsegment,,integer,none,0 to 111,0,strmflow_module =
+"",3=replace inflow; 4=inbound to NHM; 5=outbound,,,,,,"muskingum,"
+"",from NHM; 6=inbound to region; 7=outbound from,,,,,,strmflow_in_out
+"",region; 8=drains to ocean; 9=sink; 10=inbound from,,,,,,", muskingum_lake,"
+"","Great Lakes; 11=outbound to Great Lakes, add 100 to",,,,,,or
+"",flag that the value is updated),,,,,,muskingum_mann
+tosegment,Index of downstream segment to which the segment nsegment,,integer,none,0 to,0,strmflow_module =
+"",streamflow flows; for segments that do not flow to,,,,9999999,,"muskingum,"
+"",another segment enter 0,,,,,,strmflow_in_out
+"",,,,,,,", muskingum_lake,"
+"",,,,,,,or
+"",,,,,,,muskingum_mann
+tosegment_nhm,National Hydrologic Model downstream segment ID nsegment,,integer,none,0 to,0,optional
+"",,,,,9999999,,
+x_coef,"The amount of attenuation of the flow wave, called the nsegment",,real,decimal,0.0 to 0.5,0.2,strmflow_module =
+"",Muskingum routing weighting factor; enter 0.0 for,,,fraction,,,muskingum or
+"","reservoirs, diversions, and segment(s) flowing out of the",,,,,,muskingum_mann
+"",basin,,,,,,
+"",Lake routing,,,,,,
+elev_outflow,Elevation of the main outflow point for each lake using nlake,,real,feet,-300.0 to,0.0,strmflow_module =
+"",broad-crested weir routing,,,,"10,000.0",,muskingum_lake
+elevlake_init,Initial lake surface elevation for each lake using broad- nlake,,real,feet,-300.0 to,1.0,strmflow_module =
+"",crested weir routing or gate opening routing,,,,"10,000.0",,muskingum_lake
+gw_seep_coef,Linear coefficient in equation to compute lakebed ngw,,real,fraction/day,0.001 to,0.015,strmflow_module =
+"",seepage to the GWR and groundwater discharge to each,,,,0.05,,muskingum_lake
+"",lake using broad-crested weir routing or gate opening,,,,,,
+"",routing,,,,,,
+lake_coef,Coefficient in equation to route storage to streamflow nlake,,real,fraction/day,0.0001 to,0.1,strmflow_module =
+"",for each lake using linear routing,,,,1.0,,muskingum_lake
+lake_din1,Initial inflow to each lake using Puls or linear storage nlake,,real,cfs,0.0 to,0.1,strmflow_module =
+"",routing,,,,1.0E7,,muskingum_lake
+lake_evap_adj,Monthly (January to December) adjustment factor for nhru,,real,decimal,0.5 to 1.5,1.0,strmflow_module
+"",potential ET for each lake,,,fraction,,,muskingum_lake
+lake_hru_id,Identification number of the lake associated with an nhru,,integer,none,0 to nlake,0,strmflow_module =
+"",HRU; more than one HRU can be associated with each,,,,,,muskingum_lake
+"",lake,,,,,,
+lake_init,Initial storage in each lake using Puls or linear storage nlake,,real,cfs-days,0.0 to,0.0,strmflow_module =
+"",routing,,,,1.0E7,,muskingum_lake
+lake_out2,Switch to specify a second outflow point from each lake nlake,,integer,none,0 or 1,0,strmflow_module =
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+"",using gate opening routing (0=no; 1=yes),,,,,,muskingum_lake
+lake_out2_a,Coefficient A in outflow equation for each lake with a,nlake,real,cfs/feet,0.0 to,1.0,strmflow_module =
+"",second outlet using gate opening routing,,,,"10,000.0",,muskingum_lake
+lake_out2_b,Coefficient B in outflow equation for each lake with a,nlake,real,cfs,0.0 to,100.0,strmflow_module =
+"",second outlet using gate opening routing,,,,"10,000.0",,muskingum_lake
+lake_qro,Initial daily mean outflow from each lake,nlake,real,cfs,0.0 to,0.1,strmflow_module =
+"",,,,,1.0E7,,muskingum_lake
+lake_seep_elev,Elevation over which lakebed seepage to the GWR,nlake,real,feet,-300.0 to,1.0,strmflow_module =
+"",occurs for lake HRUs using broad-crested weir routing,,,,"10,000.0",,muskingum_lake
+"",or gate opening routing,,,,,,
+lake_segment_id,Index of lake associated with a segment,nsegment,integer,none,0 to nlake,0,strmflow_module =
+"",,,,,,,muskingum_lake
+"",,,,,,,and cascade_flag = 1
+lake_type,Type of lake routing method (1=Puls routing; 2=linear,nlake,integer,none,1 to 6,1,strmflow_module =
+"",routing; 3=flow through; 4=broad crested weir; 5=gate,,,,,,muskingum_lake
+"",opening; and 6=measured flow),,,,,,
+lake_vol_init,Initial lake volume for each lake using broad-crested,nlake,real,acre-feet,0.0 to,0.0,strmflow_module =
+"",weir or gate opening routing,,,,1.0E7,,muskingum_lake
+nsos,Number of storage/outflow values in table for each lake,"mxnsos,",integer,none,0 to,0,strmflow_module =
+"",using Puls routing,nlake,,,mxnsos,,muskingum_lake
+o2,Outflow values in outflow/storage tables for each lake,"mxnsos,",real,cfs,0.0 to,0.0,strmflow_module =
+"",using Puls routing,nlake,,,1.0E7,,muskingum_lake
+obsout_lake,Index of streamflow measurement station that specifies,nlake,integer,none,0 to nobs,0,strmflow_module =
+"",outflow from each lake using measured flow,,,,,,muskingum_lake
+"",replacement,,,,,,
+rate_table,Rating table with stage (rows) and gate opening (cols),"nstage,",real,cfs,-100.0 to,5.0,strmflow_module =
+"",for rating table 1 for lakes using gate opening routing,ngate,,,"1,000.0",,muskingum_lake
+"",and nratetbl>0,,,,,,
+rate_table2,Rating table with stage (rows) and gate opening (cols),"nstage2,",real,cfs,-100.0 to,5.0,strmflow_module =
+"",for rating table 2 for lakes using gate opening routing,ngate2,,,"1,000.0",,muskingum_lake
+"",and nratetbl>1,,,,,,
+rate_table3,Rating table with stage (rows) and gate opening (cols),"nstage3,",real,cfs,-100.0 to,5.0,strmflow_module =
+"",for rating table 3 for lakes using gate opening routing,ngate3,,,"1,000.0",,muskingum_lake
+"",and nratetbl>2,,,,,,
+rate_table4,Rating table with stage (rows) and gate opening (cols),"nstage4,",real,cfs,-100.0 to,5.0,strmflow_module =
+"",for rating table 4 for lakes using gate opening routing,ngate4,,,"1,000.0",,muskingum_lake
+"",and nratetbl>3,,,,,,
+ratetbl_lake,Index of lake associated with each rating table for each,nratetbl,integer,none,0 to nlake,0,strmflow_module =
+"",lake using gate opening routing,,,,,,muskingum_lake
+s2,Storage values in outflow/storage table for each lake,"mxnsos,",real,cfs,0.0 to,0.0,strmflow_module =
+Parameter name,Description Dimension1,Type,,Units,Range,Default,Required/condition
+"",using Puls routing nlake,,,,1.0E7,,muskingum_lake
+tbl_gate,Gate openings for each column for rating table 1 for ngate,,real,inches,0.0 to 20.0,0.0,strmflow_module =
+"",lakes using gate opening routing and nratetbl>0,,,,,,muskingum_lake
+tbl_gate2,Gate openings for each column for rating table 2 for ngate2,,real,inches,0.0 to 20.0,0.0,strmflow_module =
+"",lakes using gate opening routing and nratetbl>1,,,,,,muskingum_lake
+tbl_gate3,Gate openings for each column for rating table 3 for ngate3,,real,inches,0.0 to 20.0,0.0,strmflow_module =
+"",lakes using gate opening routing and nratetbl>2,,,,,,muskingum_lake
+tbl_gate4,Gate openings for each column for rating table 4 for ngate4,,real,inches,0.0 to 20.0,0.0,strmflow_module =
+"",lakes using gate opening routing and nratetbl>3,,,,,,muskingum_lake
+tbl_stage,Stage values for each row for rating table 1 for lakes nstage,,real,feet,-100.0 to,5.0,strmflow_module =
+"",using gate opening routing and nratetbl>0,,,,"1,000.0",,muskingum_lake
+tbl_stage2,Stage values for each row for rating table 2 for lakes nstage2,,real,feet,-100.0 to,5.0,strmflow_module =
+"",using gate opening routing and nratetbl>1,,,,"1,000.0",,muskingum_lake
+tbl_stage3,Stage values for each row for rating table 3 for lakes nstage3,,real,feet,-100.0 to,5.0,strmflow_module =
+"",using gate opening routing and nratetbl>2,,,,"1,000.0",,muskingum_lake
+tbl_stage4,Stage values for each row for rating table 4 for lakes nstage4,,real,feet,-100.0 to,5.0,strmflow_module =
+"",using gate opening routing and nratetbl>3,,,,"1,000.0",,muskingum_lake
+weir_coef,Coefficient for lakes using broad-crested weir routing nlake,,real,none,2.0 to 3.0,2.7,strmflow_module =
+"",,,,,,,muskingum_lake
+weir_len,Weir length for lakes using broad-crested weir routing nlake,,real,feet,1.0 to,5.0,strmflow_module =
+"",,,,,"1,000.0",,muskingum_lake
+"",Output options,,,,,,
+print_freq,"Flag to select the output frequency; for combinations, one",integer,,none,0 to 15,3,required
+"","add index numbers, e.g., daily plus yearly = 10; yearly",,,,,,
+"",plus total = 3 (0=none; 1=run totals; 2=yearly;,,,,,,
+"",4=monthly; 8=daily; or additive combinations),,,,,,
+print_type,Flag to select the type of results written to the output file one,integer,,none,0 to 2,1,required
+"",(0=measured and simulated flow only; 1=water balance,,,,,,
+"",table; 2=detailed output),,,,,,
+"",Subbasin parameters,,,,,,
+hru_subbasin,Index of subbasin assigned to each HRU nhru,integer,,none,0 to user,0,subbasin_flag = 1
+"",,,,,defined,,
+subbasin_down,Index number for the downstream subbasin whose nsub,integer,,none,0 to nsub,0,subbasin_flag = 1
+"",inflow is outflow from this subbasin,,,,,,
+"",Stream temperature simulation,,,,,,
+albedo,Short-wave solar radiation reflected by streams one,,real,decimal,0.0 to 1.0,0.1,stream_temp_flag =
+"",,,,fraction,,,1
+alte,East bank topographic altitude of each segment nsegment,,real,radians,0.0 to,0.0,stream_temp_flag =
+"",,,,,1.570796,,1
+lat_temp_adj,Correction factor to adjust the bias of the temperature of,"nsegment,",real,decimal,-5.0 to 5.0,0.0,stream_temp_flag =
+"",the lateral inflow,nmonths,,fraction,,,1
+maxiter_sntemp,Maximum number of Newton-Raphson iterations to,one,integer,none,10 to 2000,1000,stream_temp_flag =
+"",compute stream temperature,,,,,,1
+melt_temp,Temperature at which snowmelt enters a stream,one,real,degrees,0.0 to 10.0,1.5,stream_temp_flag =
+"",,,,Celsius,,,1
+seg_elev,Segment elevation at midpoint,nsegment,real,meters,-1000.0 to,0.0,stream_temp_flag =
+"",,,,,30000.0,,1
+seg_humidity,"Mean monthly humidity for each segment, used when","nsegment,",real,decimal,0.0 to 1.0,0.7,stream_temp_flag =
+"",values not input in CBH File,nmonths,,fraction,,,1
+seg_lat,Latitude of each segment,nsegment,real,degrees,-90.0 to,40.0,stream_temp_flag =
+"",,,,North,90.0,,1
+segshade_sum,Total shade fraction for summer vegetation,nsegment,real,decimal,0.0 to 1.0,0.0,stream_temp_flag =
+"",,,,fraction,,,1
+segshade_win,Total shade fraction for winter vegetation,nsegment,real,decimal,0.0 to 1.0,0.0,stream_temp_flag =
+"",,,,fraction,,,1
+ss_tau,Average residence time of subsurface interflow,nsegment,integer,days,1 to 365,30,stream_temp_flag =
+"",,,,,,,1
+stream_tave_init,Initial average stream temperature in each segment at the,nsegment,real,degrees,-10.0 to,0.0,stream_temp_flag =
+"",beginning of a simulation,,,Celsius,100.0,,1
+vce,East bank average vegetation crown width for each,nsegment,real,meters,0.0 to 15.0,0.0,stream_temp_flag =
+"",segment,,,,,,1
+vcw,West bank average vegetation crown width for each,nsegment,real,meters,0.0 to 15.0,0.0,stream_temp_flag =
+"",segment,,,,,,1
+vdemn,Minimum east bank vegetation density for each segment,nsegment,real,decimal,0.0 to 1.0,0.0,stream_temp_flag =
+"",,,,fraction,,,1
+vdemx,Maximum east bank vegetation density for each segment,nsegment,real,decimal,0.0 to 1.0,0.0,stream_temp_flag =
+"",,,,fraction,,,1
+vdwmn,Minimum west bank vegetation density for each,nsegment,real,decimal,0.0 to 1.0,0.0,stream_temp_flag =
+"",segment,,,fraction,,,1
+vdwmx,Maximum west bank vegetation density for each,nsegment,real,decimal,0.0 to 1.0,0.0,stream_temp_flag =
+"",segment,,,fraction,,,1
+vhe,East bank average vegetation height for each segment,nsegment,real,meters,0.0 to 30.0,0.0,stream_temp_flag =
+Parameter name,Description,Dimension1,Type,Units,Range,Default,Required/condition
+altw,West bank topographic altitude of each segment,nsegment,real,radians,0.0 to,0.0,stream_temp_flag =
+"",,,,,1.570796,,1
+azrh,Azimuth angle of each segment,nsegment,real,radians,-1.570796,0.0,stream_temp_flag =
+"",,,,,to,,1
+"",,,,,1.570796,,
+gw_tau,Average residence time in groundwater flow,nsegment,integer,days,1 to 365,365,stream_temp_flag =
+Parameter name,Description Dimension1,Type,,Units,Range,Default,Required/condition
+vhw,West bank average vegetation height for each segment nsegment,real,,meters,0.0 to 30.0,0.0,stream_temp_flag =
+"",,,,,,,1
+voe,East bank vegetation offset for each segment nsegment,real,,meters,0.0 to,0.0,stream_temp_flag =
+"",,,,,100.0,,1
+vow,West bank vegetation offset for each segment nsegment,real,,meters,0.0 to,0.0,stream_temp_flag =
+"",,,,,100.0,,1
+width_alpha,Alpha coefficient in power function for width nsegment,real,,unknown,0.0001 to,0.015,stream_temp_flag =
+"",calculation,,,,2.0,,1
+width_m,M value in power function for width calculation nsegment,real,,unknown,0.0001 to,0.015,stream_temp_flag =
+"",,,,,2.0,,1
+"",Mapped results parameters,,,,,,
+gvr_cell_id9,Index of the grid cell associated with each gravity nhrucell,integer,,none,0 to,0,mapOutON_OFF = 1
+"",reservoir,,,,ngwcell,,
+gvr_cell_pct9,Proportion of the grid cell area associated with each nhrucell,real,,decimal,0.0 to 1.0,1.0,mapOutON_OFF = 1
+"",gravity reservoir,,,fraction,,,
+gvr_hru_id9,Index of the HRU associated with each gravity reservoir nhrucell,integer,,none,0 to,1,mapOutON_OFF = 1
+"",,,,,nhrucell,,
+mapvars_freq,Flag to specify the output frequency (0=none; one,integer,,none,0 to 7,0,mapOutON_OFF = 1
+"",1=monthly; 2=yearly; 3=total; 4=monthly and yearly;,,,,,,
+"","5=monthly, yearly, and total; 6=weekly; 7=daily)",,,,,,
+mapvars_units,Flag to specify the output units of mapped results one,integer,,none,0 to 3,0,mapOutON_OFF = 1
+"",(0=units of the variable; 1=inches to feet; 2=inches to,,,,,,
+"",centimeters; 3=inches to meters; as states or fluxes),,,,,,
+ncol,Number of columns for each row of the mapped results one,integer,,none,1 to 50000,1,mapOutON_OFF = 1
+"",Summary results CSV file parameters,,,,,,
+poi_gage_id,USGS stream gage ID for each POI gage npoigages,string,,none,user,0,npoigages > 0 and
+"",,,,,defined,,csvON_OFF = 1
+poi_gage_segment,Segment index for each POI gage npoigages,integer,,none,0 to,0,npoigages > 0 and
+"",,,,,nsegment,,csvON_OFF = 1
+poi_type,"Type code for each POI gage (0=non-calibration gage, npoigages",integer,,none,1,1,optional
+"","1=calibration gage, 2=flow replacement gage)",,,,,,
+"",Parameters for cascading-flow simulation,,,,,,
+cascade_flg,Flag to indicate cascade type (0=allow many to many; one,integer,,none,0 or 1,0,cascade_flag = 1 and
